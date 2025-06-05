@@ -13,6 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export function hello() {
-  return 'Hello Apps Script!';
+export function main() {
+  const props = PropertiesService.getScriptProperties().getProperties();
+
+  console.log('Properties:', props);
+
+  const threads = GmailApp.search(props.QUERY);
+
+  threads
+    .map(thread => thread.getMessages())
+    .filter(messages => messages.length > 0)
+    .map(messages => messages[0])
+    .forEach(message => {
+      message.forward(props.FORWARD_TO);
+    });
 }

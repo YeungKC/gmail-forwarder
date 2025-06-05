@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { hello } from './example-module';
+import { main } from './forwarder';
 
-console.log(hello());
+main();
