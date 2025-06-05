@@ -17,6 +17,7 @@ export function main() {
   const props = PropertiesService.getScriptProperties().getProperties() as {
     QUERY: string;
     FORWARD_TO: string;
+    FROM?: string; // Optional, if not set, will use the default sender
   };
 
   if (!props.QUERY || !props.FORWARD_TO) {
@@ -27,19 +28,27 @@ export function main() {
 
   const threads = GmailApp.search(props.QUERY);
 
-  threads
-    .map(thread => ({ thread, messages: thread.getMessages() }))
-    .filter(({ messages }) => messages.length > 0)
-    .map(({ thread, messages }) => ({ thread, message: messages[0] }))
-    .forEach(({ thread, message }) => {
+  threads.forEach(thread => {
+    const message = thread.getMessages().filter(message => message.isUnread());
+
+    if (message.length === 0) {
+      console.log('No unread messages in thread:', thread.getId());
+      return;
+    }
+
+    message.forEach(msg => {
       console.log(
         'Forwarding message:',
-        message.getSubject(),
+        msg.getSubject(),
         'to',
         props.FORWARD_TO
       );
 
-      message.forward(props.FORWARD_TO);
-      thread.markRead();
+      msg.forward(props.FORWARD_TO, {
+        from: props.FROM,
+      });
     });
+
+    thread.markRead();
+  });
 }
