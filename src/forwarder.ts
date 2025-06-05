@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 export function main() {
-  const props = PropertiesService.getScriptProperties().getProperties();
+  const props = PropertiesService.getScriptProperties().getProperties() as {
+    QUERY: string;
+    FORWARD_TO: string;
+  };
 
   if (!props.QUERY || !props.FORWARD_TO) {
     throw new Error(
