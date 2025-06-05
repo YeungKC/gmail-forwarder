@@ -25,6 +25,14 @@ export function main() {
     .filter(messages => messages.length > 0)
     .map(messages => messages[0])
     .forEach(message => {
+      console.log(
+        'Forwarding message:',
+        message.getSubject(),
+        'to',
+        props.FORWARD_TO
+      );
+
       message.forward(props.FORWARD_TO);
+      message.markRead();
     });
 }
