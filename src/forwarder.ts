@@ -21,10 +21,10 @@ export function main() {
   const threads = GmailApp.search(props.QUERY);
 
   threads
-    .map(thread => thread.getMessages())
-    .filter(messages => messages.length > 0)
-    .map(messages => messages[0])
-    .forEach(message => {
+    .map(thread => ({ thread, messages: thread.getMessages() }))
+    .filter(({ messages }) => messages.length > 0)
+    .map(({ thread, messages }) => ({ thread, message: messages[0] }))
+    .forEach(({ thread, message }) => {
       console.log(
         'Forwarding message:',
         message.getSubject(),
@@ -33,6 +33,6 @@ export function main() {
       );
 
       message.forward(props.FORWARD_TO);
-      message.markRead();
+      thread.markRead();
     });
 }
