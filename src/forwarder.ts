@@ -16,7 +16,11 @@
 export function main() {
   const props = PropertiesService.getScriptProperties().getProperties();
 
-  console.log('Properties:', props);
+  if (!props.QUERY || !props.FORWARD_TO) {
+    throw new Error(
+      'Properties QUERY and FORWARD_TO must be set in script properties.'
+    );
+  }
 
   const threads = GmailApp.search(props.QUERY);
 
