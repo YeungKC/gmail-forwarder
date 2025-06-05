@@ -26,6 +26,7 @@ pnpm deploy:prod
 ## Usage
 
 The script will:
+
 - Search for emails matching the query
 - Forward all unread messages to the specified address
 - Mark the original threads as read
